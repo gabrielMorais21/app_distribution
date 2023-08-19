@@ -62,4 +62,4 @@ jobs:
             --app 1:288868821009:android:6e69df7fb08a24881169b0 
             --release-notes "Bug fixes and improvements"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
