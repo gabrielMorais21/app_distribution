@@ -57,6 +57,6 @@ jobs:
           path: app/build/outputs/flutter-apk # Caminho de destino onde você deseja que o APK seja baixado
 
       - name: Distribuir APK via Firebase App Distribution
-        run:  firebase-tools && firebase appdistribution:distribute app/build/outputs/flutter-apk/app-release.apk  --app 1:288868821009:android:6e69df7fb08a24881169b0 --release-notes "Bug fixes and improvements" --token ${{ secrets.FIREBASE_TOKEN }}
+        run:  firebase appdistribution:distribute app/build/outputs/flutter-apk/app-release.apk  --app 1:288868821009:android:6e69df7fb08a24881169b0 --release-notes "Bug fixes and improvements" --token ${{ secrets.FIREBASE_TOKEN }}
         env:
           FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
