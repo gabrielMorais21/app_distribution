@@ -19,7 +19,7 @@ jobs:
       - name: Enter flutter 
         run: cd flutter
 
-      - name: Enter flutter 
+      - name: checkout flutter 
         run:  git checkout 3.4.4
 
       - name: export flutter 
