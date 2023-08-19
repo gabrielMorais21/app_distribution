@@ -20,7 +20,9 @@ jobs:
         run: cd flutter
 
       - name: checkout flutter 
-        run:  git checkout 3.4.4
+        run: 
+         cd flutter
+         git checkout 3.4.4
 
       - name: export flutter 
         run:  echo "##vso[task.setvariable variable=FlutterToolPath]`pwd`/flutter/bin"
