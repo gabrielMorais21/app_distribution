@@ -13,17 +13,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: clone flutter
+      - name: Clone Flutter
         run: git clone https://github.com/flutter/flutter.git 
 
-      - name: checkout flutter 
-        run: 
-         cd flutter && git checkout 3.3.4
+      - name: Checkout Flutter 
+        run: |
+          cd flutter
+          git checkout 3.3.4
 
-      - name: export flutter 
+      - name: Export Flutter Path
         run: echo "##[set-output name=FlutterToolPath]$(pwd)/flutter/bin"
         id: flutter_path
-
 
       - name: Build Release APK
         run: ${{ steps.flutter_path.outputs.FlutterToolPath }}/flutter build apk --release
@@ -58,10 +58,8 @@ jobs:
 
       - name: Distribuir APK via Firebase App Distribution
         run: |
-          npm install -g firebase-tools
           firebase appdistribution:distribute app/build/outputs/flutter-apk/app-release.apk 
             --app 1:288868821009:android:6e69df7fb08a24881169b0 
             --release-notes "Bug fixes and improvements"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }
-
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
