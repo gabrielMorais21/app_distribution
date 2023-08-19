@@ -50,11 +50,18 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
 
-      - name: Install Firebase CLI
-        run:  firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
+      - name: Download APK Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: release-apk # O mesmo nome que você usou ao fazer o upload
+          path: app/build/outputs/flutter-apk # Caminho de destino onde você deseja que o APK seja baixado
 
-      - name: distribute
-        run:  firebase appdistribution:distribute build\app\outputs\flutter-apk\app-release.apk  --app 1:288868821009:android:6e69df7fb08a24881169b0 --release-notes "Bug fixes and improvements"
-
+      - name: Distribuir APK via Firebase App Distribution
+        run: |
+          npm install -g firebase-tools
+          firebase appdistribution:distribute app/build/outputs/flutter-apk/app-release.apk 
+            --app 1:288868821009:android:6e69df7fb08a24881169b0 
+            --release-notes "Bug fixes and improvements"
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }
+
