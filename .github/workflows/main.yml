@@ -1,4 +1,4 @@
-name: Firebase Deploy
+name: Firebase Deploy and Generate APK
 
 on:
   push:
@@ -6,21 +6,53 @@ on:
       - master
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14 # ou qualquer versão que você preferir
+      - name: clone flutter
+        run: git clone https://github.com/flutter/flutter.git 
 
-    - name: Install dependencies
-      run: npm install -g firebase-tools
+      - name: Enter flutter 
+        run: cd flutter
 
-    - name: Firebase Deploy
-      run: |
-        firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --non-interactive
+      - name: Enter flutter 
+        run:  git checkout 3.4.4
+
+      - name: export flutter 
+        run:  echo "##vso[task.setvariable variable=FlutterToolPath]`pwd`/flutter/bin"
+
+
+      - name: Build Release APK
+        run: $(FlutterToolPath)/flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk 
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js and Firebase
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14 
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Install Firebase CLI
+        run: firebase appdistribution:distribute build\app\outputs\flutter-apk\app-release.apk  --app 1:288868821009:android:6e69df7fb08a24881169b0 --release-notes "Bug fixes and improvements"
+
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
