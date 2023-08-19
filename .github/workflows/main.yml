@@ -16,13 +16,9 @@ jobs:
       - name: clone flutter
         run: git clone https://github.com/flutter/flutter.git 
 
-      - name: Enter flutter 
-        run: cd flutter
-
       - name: checkout flutter 
         run: 
-         cd flutter
-         git checkout 3.4.4
+         cd flutter && git checkout 3.4.4
 
       - name: export flutter 
         run:  echo "##vso[task.setvariable variable=FlutterToolPath]`pwd`/flutter/bin"
